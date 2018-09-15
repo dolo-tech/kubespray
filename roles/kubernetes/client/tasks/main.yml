@@ -73,3 +73,11 @@
   run_once: yes
   delegate_to: localhost
   when: kubectl_localhost|default(false) and kubeconfig_localhost|default(false)
+
+- name: copy config file to HOME/.kube dir
+  command: "{{ item }}"
+  with_items:
+    - mkdir -p ~{{ansible_user }}/.kube
+    - cp /etc/kubernetes/admin.conf ~{{ansible_user }}/.kube/config
+    - chown -R {{ ansible_user }}:{{ ansible_user }} ~{{ansible_user }}/.kube
+    - chmod 777 ~{{ansible_user }}/.kube/config
