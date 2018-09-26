@@ -48,3 +48,9 @@
     - { role: kubernetes/kubeadm, tags: kubeadm, when: "kubeadm_enabled" }
     - { role: network_plugin, tags: network }
   environment: "{{proxy_env}}"
+
+# gpu node setup as well
+- hosts: gpu-node
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  roles:
+    - { role: kubernetes/gpu, tags: gpu }
