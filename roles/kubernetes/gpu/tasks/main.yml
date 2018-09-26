@@ -1,0 +1,23 @@
+---
+- name: curlstuff
+  command: bash -c "curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -"
+
+- name: dist
+  command: bash -c "curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu16.04/amd64/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list"
+
+- name: docker2
+  command: bash -c "apt-get update && apt-get install -y --allow-downgrades nvidia-docker2=2.0.3+docker17.03.2-1 nvidia-container-runtime=2.0.0+docker17.03.2-1"
+
+- name: copy_daemon
+  copy:
+    content: '{"default-runtime": "nvidia","runtimes": { "nvidia": {"path": "/usr/bin/nvidia-container-runtime","runtimeArgs": []}}}'
+    dest: /etc/docker/daemon.json
+
+- name: reload
+  command: bash -c "pkill -SIGHUP dockerd"
+
+- name: dockerreload
+  command: bash -c "systemctl daemon-reload"
+
+- name: kubletrestart
+  command: bash -c "systemctl restart kubelet"
