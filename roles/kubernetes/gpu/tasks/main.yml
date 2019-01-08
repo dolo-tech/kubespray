@@ -19,5 +19,8 @@
 - name: dockerreload
   command: bash -c "systemctl daemon-reload"
 
+- name: dockerrestart
+  command: bash -c "systemctl restart docker"
+
 - name: kubletrestart
   command: bash -c "systemctl restart kubelet"
